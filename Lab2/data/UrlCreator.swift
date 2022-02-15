@@ -8,16 +8,17 @@
 import Foundation
 
 class UrlCreator{
-    let limit: Int
-    let subreddit: String
-    let initUrl = "https://www.reddit.com/r"
-    var url:URL?{
-        URL(string:"\(initUrl)/\(subreddit)/top.json?limit=\(limit)")
+    var urlComponents = URLComponents()
+    
+    func createUrl(subreddit: String, params: [URLQueryItem] ) -> URL?{
+        urlComponents.scheme = "https"
+        urlComponents.host = "www.reddit.com"
+        urlComponents.path = "/r/\(subreddit)/top.json"
+        urlComponents.queryItems = params
+        print(urlComponents.url?.absoluteString)
+        return urlComponents.url
     }
     
-    init (subreddit: String, limit:Int){
-        self.limit=limit
-        self.subreddit=subreddit
-    }
+    
 
 }

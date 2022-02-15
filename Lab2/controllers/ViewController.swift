@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var favorite: UIButton!
     
     
-//    
+//
 //    func createUrl(subreddit: String, limit:Int)->URL?{
 //        return URL(string:"https://www.reddit.com/r/\(subreddit)/top.json?limit=\(limit)")
 //    }
@@ -39,7 +39,9 @@ class ViewController: UIViewController {
 
         // Obtain Reference to Shared Session
         let sharedSession = URLSession.shared
-        if let url = UrlCreator(subreddit: "ios", limit:1).url{
+        let urlCreator = UrlCreator()
+        let params = [URLQueryItem(name: "limit", value: "1")]
+        if let url = urlCreator.createUrl(subreddit: "ios",  params: params){
             // Create Request
             let request = URLRequest(url: url)
             // Create Data Task
@@ -68,8 +70,12 @@ class ViewController: UIViewController {
                             self.rating.setTitle("\(post.score)", for: .normal)
                             self.comments.setTitle("\(post.numComments)", for: .normal)
                             if let img = URL(string:post.url){
+                                print("HERE "+post.url)
                                 if let data = try? Data(contentsOf: img) {
-                                    self.image.image  = UIImage(data: data)
+                                    let image = UIImage(data: data)
+                                    if (image != nil){
+                                    self.image.sd_setImage(with: img, completed: nil)
+                                    }
                                 }
                             }
                         }
